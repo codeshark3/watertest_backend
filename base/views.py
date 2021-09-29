@@ -5,6 +5,15 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Test
+import csv
+from django.http import HttpResponse
+import pandas as pd
+import numpy as np
+from datetime import datetime
+from sklearn.preprocessing import LabelEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+import json
 # from .utils import get_images
 
 # from PIL import Image
@@ -21,6 +30,7 @@ def getRoutes(request):
         "/api/tests/create/",
         "/api/tests/upload/",
         "/api/count/",
+        "/api/charts/"
         "/api/tests/top/",
         "/api/tests/<id>",
         "/api/tests/delete/<id>/",
@@ -32,7 +42,7 @@ def getRoutes(request):
 #results = (Test.objects.all().order_by('-created_at'))
 @api_view(["GET"])
 def getTests(request):
-    tests = Test.objects.all().order_by('-created_at')
+    tests = Test.objects.all().order_by('created_at')
     serializer = TestSerializer(tests,many=True)
     return Response(serializer.data)
 
@@ -84,10 +94,10 @@ def getCount(request):
     lTests=Test.objects.count()
     hTests=Test.objects.count()
 
-    opTests=Test.objects.filter(oncho='Positive').count()
-    spTests=Test.objects.filter(schisto='Positive').count()
-    lpTests=Test.objects.filter(lf='Positive').count()
-    hpTests=Test.objects.filter(helminths='Positive').count()
+    opTests=Test.objects.filter(oncho='1').count()
+    spTests=Test.objects.filter(schisto='1').count()
+    lpTests=Test.objects.filter(lf='1').count()
+    hpTests=Test.objects.filter(helminths='1').count()
 
     onTests=oTests-opTests
     snTests=sTests-spTests
@@ -99,10 +109,10 @@ def getCount(request):
         "sTests":Test.objects.count(),
         "lTests":Test.objects.count(),
         "hTests":Test.objects.count(),
-        "opTests":Test.objects.filter(oncho='Positive').count(),
-        "spTests":Test.objects.filter(schisto='Positive').count(), 
-        "lpTests":Test.objects.filter(lf='Positive').count(), 
-        "hpTests":Test.objects.filter(helminths='Positive').count(),
+        "opTests":Test.objects.filter(oncho='1').count(),
+        "spTests":Test.objects.filter(schisto='1').count(), 
+        "lpTests":Test.objects.filter(lf='1').count(), 
+        "hpTests":Test.objects.filter(helminths='1').count(),
         "onTests":oTests-opTests,
         "snTests":sTests-spTests,
         "lnTests":lTests-lpTests,
@@ -112,3 +122,40 @@ def getCount(request):
     # serializer = TestSerializer(count, many=False)
     return Response(countList)
 
+
+@api_view(["GET"])
+def getCharts(request):
+    oncho = Test.objects.values_list("oncho",flat=True)
+    # result=list(oncho.values())
+    
+    created_at = list(Test.objects.values_list('created_at', flat=True))
+    d = {
+    "tests":oncho,
+    "dates": created_at
+        }
+
+
+    df = pd.DataFrame(d)
+    df = df.iloc[:,].values
+    # print (df.head())
+   
+    tests = LabelEncoder()
+    df[:,0] = tests.fit_transform(df[:,0])
+    ct = ColumnTransformer(transformers=[('encode',OneHotEncoder(),[0])], remainder='passthrough')
+    y=ct.fit_transform(df)
+   
+    y=pd.DataFrame(y)
+    # schistoChart = Test.objects.filter(schisto='Positive')
+    # response =HttpResponse(content_type='text/csv',headers={'Content-Disposition': 'attachment; filename="tates.csv"',})
+    # y=y.reset_index().to_json(orient='records')
+    result = {
+            "chart":y[1],
+            "dates":y[2]
+        }
+    # print(y.head())
+    # writer =csv.writer(response)
+    # writer.writerow(['tests','dates'])
+    # writer.writerow(oncho)
+    # writer.writerow(created_at)
+    # result = [dates]
+    return Response(result)

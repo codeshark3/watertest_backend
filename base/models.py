@@ -23,18 +23,22 @@ class Test(models.Model):
     age = models.IntegerField( null=True, blank=True)
     sex = models.CharField(max_length=200, null=True, blank=True)
     location = models.CharField(max_length=200, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now=True)
-    oncho =models.CharField(max_length=200, null=True, blank=True)
-    schisto =models.CharField(max_length=200, null=True, blank=True)
-    lf = models.CharField(max_length=200, null=True, blank=True)
-    helminths = models.CharField(max_length=200, null=True, blank=True)
+    created_at = models.DateField(auto_now=True)
+    oncho =models.IntegerField( null=True, blank=True)
+    schisto =models.IntegerField( null=True, blank=True)
+    lf = models.IntegerField( null=True, blank=True)
+    helminths = models.IntegerField( null=True, blank=True)
+   
     
     onchoImage = models.ImageField(null=True,blank=True)
     schistoImage =  models.ImageField(null=True,blank=True)
     lfImage = models.ImageField(null=True,blank=True)
     helminthsImage =  models.ImageField(null=True,blank=True)
   
-    
+    # oncho =models.CharField(max_length=200, null=True, blank=True)
+    # schisto =models.CharField(max_length=200, null=True, blank=True)
+    # lf = models.CharField(max_length=200, null=True, blank=True)
+    # helminths = models.CharField(max_length=200, null=True, blank=True)
     def __str__(self):
         return self.name
 
@@ -71,47 +75,47 @@ class Test(models.Model):
         if oncho_result < 2 :
        
             print('Negative')
-            self.oncho = "Negative"
+            self.oncho = 0
         elif oncho_result == 2:
     
-            self.oncho = "Positive"
+            self.oncho = 1
             print('Positive')
         elif oncho_result> 2:
-            self.oncho = "Not Valid"
+            self.oncho = 0
             print('Not Valid')
        #schisto result
         if sch_result < 2 :
         
             print('Negative')
-            self.schisto = "Negative"
+            self.schisto = 0
         elif sch_result == 2:
 
-            self.schisto = "Positive"
+            self.schisto = 1
             print('Positive')
         elif sch_result> 2:
-            self.schisto = "Not Valid"
+            self.schisto = 0
             print('Not Valid')
        
         #lf result
         if lf_result < 2 :
        
             print('Negative')
-            self.lf = "Negative"
+            self.lf = 0
         elif lf_result == 2:
-            self.lf = "Positive"
+            self.lf = 1
             print('Positive')
         elif lf_result> 2:
-            self.lf = "Not Valid"
+            self.lf =0
             print('Not Valid')
        
        #helminths
         if hel_result < 2 :
        
             print('Negative')
-            self.helminths = "Negative"
+            self.helminths = 0
         elif hel_result == 2:
     
-            self.helminths = "Positive"
+            self.helminths = 1
             print('Positive')
         elif hel_result> 2:
             self.helminths = "Not Valid"
