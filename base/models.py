@@ -17,7 +17,7 @@ from io import BytesIO
 
 # Create your models here.
 class Test(models.Model):
-    
+    _id = models.AutoField(primary_key=True, editable=False)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=200, null=True, blank=True)
     age = models.IntegerField( null=True, blank=True)
