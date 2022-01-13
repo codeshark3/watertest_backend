@@ -23,6 +23,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
 import json
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def getTests(request):
     tests = Test.objects.all().order_by('_id')
     serializer = TestSerializer(tests,many=True)
@@ -31,6 +32,7 @@ def getTests(request):
 
 
 @api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def createTest(request):
     data = request.data
    
@@ -73,6 +75,7 @@ def getTest(request,pk):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def getCount(request):
     oTests =Test.objects.count()
     sTests=Test.objects.count()
@@ -111,9 +114,11 @@ def getCount(request):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def getCharts(request):
-    oncho = Test.objects.annotate(month=TruncMonth('created_at')).values('month').annotate(c=Sum("oncho")).values('month','c')  
+    # oncho = Test.objects.annotate(month=TruncMonth('created_at')).values('month').annotate(c=Sum("oncho")).values('month','c')  
     
-    # oncho = list(itertools.chain(*oncho))
-    result =oncho
-  
+    # # oncho = list(itertools.chain(*oncho))
+    # result =oncho
+    result ={
+        "value":key,
+    }
     return Response(result)
