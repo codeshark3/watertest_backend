@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
-
+from django.core.paginator import Paginator,EmptyPage,Page,PageNotAnInteger
 from base.models import Test
 from base.serializers import TestSerializer
 
@@ -25,9 +25,28 @@ import json
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def getTests(request):
-    tests = Test.objects.all().order_by('_id')
+    query = request.query_params.get('keyword')
+    if query == None:
+        query = ''
+
+    tests = Test.objects.filter(name__icontains=query).order_by('_id')
+    page = request.query_params.get('page')
+    paginator = Paginator(tests,40)
+
+    try:
+        tests = paginator.page(page)
+    except PageNotAnInteger:
+        tests = paginator.page(1)
+    except EmptyPage:
+        tests = paginator.page(paginator.num_pages)
+
+    if page == None:
+        page = 1
+    page = int(page)
+
+
     serializer = TestSerializer(tests,many=True)
-    return Response(serializer.data) 
+    return Response({'tests':serializer.data,'page':page,'pages':paginator.num_pages}) 
 
 
 
@@ -114,11 +133,12 @@ def getCount(request):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def getCharts(request):
-    # oncho = Test.objects.annotate(month=TruncMonth('created_at')).values('month').annotate(c=Sum("oncho")).values('month','c')  
-    
-    # # oncho = list(itertools.chain(*oncho))
-    # result =oncho
-    result ={
-        "value":key,
+   
+
+   labels = [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
+   values = [10, 20, 30, 40, 50, 60, 70,80,90]
+   result = {
+    "labels":   labels,
+    "values":  values
     }
-    return Response(result)
+   return Response(result)

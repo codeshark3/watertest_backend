@@ -25,7 +25,7 @@ urlpatterns = [
     path('api/tests/',include('base.urls.test_urls')),
     path('api/users/',include('base.urls.user_urls')),
     path('api/count/',include('base.urls.count_urls')),
-    path('api/charts/',include('base.urls.test_urls')),
+    path('api/charts/',include('base.urls.chart_urls')),
     
     
     
