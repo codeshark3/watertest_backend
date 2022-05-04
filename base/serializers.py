@@ -39,10 +39,7 @@ class UserSerializerWithToken(UserSerializer):
 class TestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Test
-        fields = '__all__'
-
-
-
-        #    fields =  ['id','name','age', 'sex', 'location', 'oncho', 'schisto', 'lf', 'helminths', '']
+        # fields = '__all__'
+        fields =  ['_id','name','age', 'sex', 'location', 'oncho', 'schisto', 'lf', 'helminths']
 
   

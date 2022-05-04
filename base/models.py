@@ -24,10 +24,15 @@ class Test(models.Model):
     sex = models.CharField(max_length=200, null=True, blank=True)
     location = models.CharField(max_length=200, null=True, blank=True)
     created_at = models.DateField(auto_now=True)
-    oncho =models.IntegerField( null=True, blank=True)
-    schisto =models.IntegerField( null=True, blank=True)
-    lf = models.IntegerField( null=True, blank=True)
-    helminths = models.IntegerField( null=True, blank=True)
+    # oncho =models.IntegerField( null=True, blank=True)
+    # schisto =models.IntegerField( null=True, blank=True)
+    # lf = models.IntegerField( null=True, blank=True)
+    # helminths = models.IntegerField( null=True, blank=True)
+   
+    oncho =models.CharField(max_length=200, null=True, blank=True)
+    schisto =models.CharField(max_length=200, null=True, blank=True)
+    lf = models.CharField(max_length=200, null=True, blank=True)
+    helminths = models.CharField(max_length=200, null=True, blank=True)
    
     
     onchoImage = models.ImageField(null=True,blank=True)
