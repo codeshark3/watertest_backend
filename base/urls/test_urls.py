@@ -8,6 +8,7 @@ urlpatterns = [
     path('mobile/', views.getTestsMobile ,name="mobile"),
     path('create/', views.createTest ,name="createTest"),
     path('<str:pk>/', views.getTest, name="test"),
+ 
 
    
    

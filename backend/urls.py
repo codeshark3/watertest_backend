@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/count/',include('base.urls.count_urls')),
     path('api/charts/',include('base.urls.chart_urls')),
     path('api/predictions/',include('base.urls.prediction_urls')),
+    path('api/datatable/',include('base.urls.datatable_urls')),
     
     
     
